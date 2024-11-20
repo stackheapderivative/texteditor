@@ -1,0 +1,6 @@
+The reason as to why I have used a deref. c to check for q is so that when I press enter, it'll take note of it. If I did not do that, it would quit immediately! As it would have updated.
+Can set terminal attributes using tcgetattr() to read current attributes into a struct!
+With this, modifing the struct by hand and passing modified struct to tcsetattr to write new terminal attributes
+ECHO in the instance of enableRAWMode is a bitflag, we just used the bitwise operator NOT (~)
+Made a disable raw mode, where we use a global variable origTermios to retain the original state before exit. raw will equal origTermios before anything is modified.
+Using ICANON, we read byte by byte, allowing us to quit by pressing q instead of entering it.
