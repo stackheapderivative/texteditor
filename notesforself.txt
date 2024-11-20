@@ -4,3 +4,5 @@ With this, modifing the struct by hand and passing modified struct to tcsetattr 
 ECHO in the instance of enableRAWMode is a bitflag, we just used the bitwise operator NOT (~)
 Made a disable raw mode, where we use a global variable origTermios to retain the original state before exit. raw will equal origTermios before anything is modified.
 Using ICANON, we read byte by byte, allowing us to quit by pressing q instead of entering it.
+Added print statements to see how many bytes my keypresses were via iscntrl and else statement.
+removed the default output of \r\n so that I have to do it myself each time.

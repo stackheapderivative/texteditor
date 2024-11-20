@@ -1,0 +1,17 @@
+These are just old code snippets I want to save to understand some things, some time.
+This is a really cool project.
+
+while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q') {
+        if (iscntrl(c)) { //iscntrl tests to see if a characte is a controll character(non-printable)
+            printf("%d\n", c); //print format of a byte as decimal %d
+        } else {
+            printf("%d ('%c')\r\n", c, c);//%c tells to write the byte out directly
+        } //this tells us how the keypresses translate into bytes we read.
+    }
+
+\\ this is a separator for each code snippet.
+
+tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);//applies the new setting to terminal, the second parameter tells where it'll be done.
+    //ergo, it pends output to be written and discards any unread input.
+
+\\
