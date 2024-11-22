@@ -15,3 +15,20 @@ tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);//applies the new setting to terminal, 
     //ergo, it pends output to be written and discards any unread input.
 
 \\
+char c = '\0'; //null terminate
+        if (read(STDIN_FILENO, &c, 1) == -1 && errno != EAGAIN) die("read"); //this type of statement returns if -1 if fails.
+        if (iscntrl(c)) { //iscntrl tests to see if a characte is a controll character(non-printable)
+            printf("%d\n", c); //print format of a byte as decimal %d
+        } else {
+            printf("%d ('%c')\r\n", c, c);//%c tells to write the byte out directly
+        } //this tells us how the keypresses translate into bytes we read.
+        if (c == CTRL_KEY('q')) {
+            break;
+        }
+
+        /*
+    This is from the unistd library, it is to read input at each byte into c, untill there are no more, then return the number of
+    bytes.
+    To use q to quit, we make sure c != q!*/
+
+\\

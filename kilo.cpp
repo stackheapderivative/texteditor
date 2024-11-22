@@ -4,6 +4,12 @@
 #include <termio.h>
 #include <ctype.h>
 
+/*** DEFINES ***/
+
+//ANDs a character with 00011111, in binary. Mirrors what ctrl does in terminal, where it strips 5-6 bits when pressed with ctrl.
+#define CTRL_KEY(k) ((k) & 0x1f)
+
+
 /*** DATA ***/
 
 struct termios origTermios;
@@ -67,6 +73,30 @@ void enableRawMode() {
     
 }
 
+char editorReadkey() {
+    //this function waits for a keypress to be sent and to return it. Deals with low-level terminal input.
+    int nread;
+    char c;
+
+    while ((nread = read(STDIN_FILENO, &c, 1)) != 1) {
+        if (nread == -1 && errno != EAGAIN) die("read");
+    }
+    return c;
+}
+
+/*** INPUT ***/
+
+void editorProcessKeyPresses() {
+    //waits for a keypress and then handles it. Basically mapping keys!
+    char c = editorReadkey();
+
+    switch (c) {
+        case CTRL_KEY('q'):
+            exit(0);
+            break;
+    }
+}
+
 /*** INIT ***/
 
 int main() {
@@ -74,21 +104,9 @@ int main() {
     enableRawMode();
 
     while (1) {
-        char c = '\0'; //null terminate
-        if (read(STDIN_FILENO, &c, 1) == -1 && errno != EAGAIN) die("read"); //this type of statement returns if -1 if fails.
-        if (iscntrl(c)) { //iscntrl tests to see if a characte is a controll character(non-printable)
-            printf("%d\n", c); //print format of a byte as decimal %d
-        } else {
-            printf("%d ('%c')\r\n", c, c);//%c tells to write the byte out directly
-        } //this tells us how the keypresses translate into bytes we read.
-        if (c == 'q') {
-            break;
-        }
+        editorProcessKeyPresses();
     }
-    /*
-    This is from the unistd library, it is to read input at each byte into c, untill there are no more, then return the number of
-    bytes.
-    To use q to quit, we make sure c != q!*/
+    
     
     return 0;
 }
